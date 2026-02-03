@@ -30,6 +30,12 @@
         <li>Add a button - Make it save the text to Firebase </li>
         <li>Add another button - Make it read the message from Firebase and write it to the heading of this page</li>
     </ul>
+
+    <input id = "fbWriteInput">
+    <button id = "titleChangerButton" onclick="writeData();">Change Data in the base</button>
+    <br>
+    <button id = "fbReadButton" onclick="readData();">Display Data in the Title</button>
+
     <h4>Firebase logins</h4>
     <ul>
         <li>Use Google Authentication</li>
@@ -47,5 +53,6 @@
         By the end of the week you will have Firebase going.</p>
 </body>
 
-<script src="script.js"></script>
+<script type="module" src="./main.mjs"></script>
+<script src="./script.js"></script>
 </html>
