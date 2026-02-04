@@ -32,96 +32,24 @@ function fb_initialise() {
 
 fb_initialise();
 
-async function fb_authenticate() {
+
+function fb_authenticate() {
     const AUTH = getAuth();
     const PROVIDER = new GoogleAuthProvider();
     
     // The following makes Google ask the user to select the account
-
-    return new Promise((resolve) => {
-        (async () => {
-
-            PROVIDER.setCustomParameters({
-                prompt: 'select_account'
-            });
-            
-            var userData;
-    
-            try {
-                const result = await signInWithPopup(AUTH, PROVIDER);
-    
-                const UID = result.user.uid;
-                
-                
-                var userExists = await fb_read("UserData/" + UID);
-                
-                if(userExists == null) {
-                    //Create new Account
-
-                    //Add entry for this user in userData table
-                    fb_write("UserData/" + UID, 
-                        {
-                            userName: "",
-                            fullName: result.user.displayName, //private info, just so i know who's who
-                        }
-                    )
-        
-                    //Add entry for this user is all leaderboards
-                    
-                    Object.keys(await fb_read('Leaderboard')).forEach(game => {
-                        fb_write("Leaderboard/" + game + "/" + UID, { Score: 0 } )
-                    });
-                    
-                    changeName(true);
-                }
-
-                resolve(result);
-    
-            } catch (error) {
-                console.log('error!');
-                console.log(error);
-                resolve(null);
-    
-            }
-
-        })();
-
-
-        /*
-        signInWithPopup(AUTH, PROVIDER).then((result) => {    
-            resolve(result);
-        })
-        
-        .catch((error) => {
-            
-        });
-        */
-
+    PROVIDER.setCustomParameters({
+        prompt: 'select_account'
     });
-}
-
-async function changeName(mandatory) {
-    return new Promise((resolve) => {
-        (async () => {
-            var newName = prompt("What do you want your display name to be?");
-            if (newName != null && newName != "" && newName != " ") {
-                await fb_write("UserData/" + sessionStorage.getItem('UID') + "/userName", newName);
-                resolve(newName);
-            } else {
-                //user didn't set name
     
-                if (mandatory) {
-                    //resolve user's google name
-                    const newName = getAuth().currentUser.displayName;
-                    
-                    await fb_write("UserData/" + sessionStorage.getItem('UID') + "/userName", newName);
-                    resolve(newName);
-
-                } else {
-                    resolve(null);
-                }
-            }
-        })();
+    signInWithPopup(AUTH, PROVIDER).then((result) => {
+        console.log('success');
+        console.log(result);
+    })
+    
+    .catch((error) => {
+        console.log('error!');
+        console.log(error);
     });
 }
 
@@ -141,7 +69,8 @@ function fb_authChanged() {
         console.log(error);
     });
 }
-fb_authChanged();
+
+//fb_authChanged();
 
 function fb_logout() {
     const AUTH = getAuth();
@@ -310,4 +239,4 @@ function fb_getAuthData() {
     return getAuth();
 }
 
-export { fb_initialise, fb_authenticate, fb_authChanged, fb_logout, fb_write, fb_read, fb_update, fb_readSorted, fb_delete, fb_valChanged, changeName, changeLog, fb_getAuthData };
+export { fb_initialise, fb_authenticate, fb_authChanged, fb_logout, fb_write, fb_read, fb_update, fb_readSorted, fb_delete, fb_valChanged, changeLog, fb_getAuthData, getAuth };

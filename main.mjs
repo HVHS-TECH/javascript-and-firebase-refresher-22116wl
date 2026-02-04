@@ -1,14 +1,19 @@
-import { fb_initialise, fb_authenticate, fb_logout, fb_read, fb_write, fb_update, fb_readSorted, fb_delete } from './fb.mjs';
-
-fb_initialise();
+import { fb_initialise, fb_authenticate, fb_logout, fb_read, fb_write, fb_update, fb_readSorted, fb_delete, getAuth } from './fb.mjs';
 
 async function writeData() {
     await fb_write("Value", document.getElementById("fbWriteInput").value);
+    
+
+    auth = getAuth()
+    if (auth == null) {
+        await fb_write("User", "Anonymous");
+    } else {
+        console.log(auth);
+    }
 }
 
 async function readData() {
-    await fb_read("Value")
-    document.getElementById("")
+    document.getElementById("welcomeMessage").innerHTML = await fb_read("Value");
 }
 
 window.fb_authenticate = fb_authenticate;
