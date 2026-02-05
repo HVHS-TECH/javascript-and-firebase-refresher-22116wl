@@ -1,7 +1,5 @@
 //**************************************************************/
-// fb_io.mjs
-// Generalised firebase routines
-// Written by Wilfred Leicester, Term 2 2025 but copied ;)
+// Written by Wilfred Leicester, Mostly in Term 2 2025 and copied, but modified slighty in some places.
 //
 // All variables & function begin with fb_  all const with FB_
 // Diagnostic code lines have a comment appended to them //DIAG
