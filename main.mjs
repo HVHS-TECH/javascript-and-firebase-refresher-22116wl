@@ -4,16 +4,17 @@ async function writeData() {
     await fb_write("Value", document.getElementById("fbWriteInput").value);
     
 
-    auth = getAuth()
-    if (auth == null) {
+    const auth = getAuth()
+    console.log(auth)
+    if (auth["currentUser"] == null) {
         await fb_write("User", "Anonymous");
     } else {
-        console.log(auth);
+        await fb_write("User", auth["currentUser"]["displayName"]);
     }
 }
 
 async function readData() {
-    document.getElementById("welcomeMessage").innerHTML = await fb_read("Value");
+    document.getElementById("welcomeMessage").innerHTML = await fb_read("Value") + " - written by " + await fb_read("User");
 }
 
 window.fb_authenticate = fb_authenticate;

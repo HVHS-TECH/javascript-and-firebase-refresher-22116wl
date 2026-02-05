@@ -33,23 +33,32 @@ function fb_initialise() {
 fb_initialise();
 
 
-function fb_authenticate() {
+async function fb_authenticate() {
     const AUTH = getAuth();
     const PROVIDER = new GoogleAuthProvider();
     
     // The following makes Google ask the user to select the account
-    PROVIDER.setCustomParameters({
-        prompt: 'select_account'
-    });
-    
-    signInWithPopup(AUTH, PROVIDER).then((result) => {
-        console.log('success');
-        console.log(result);
-    })
-    
-    .catch((error) => {
-        console.log('error!');
-        console.log(error);
+    return new Promise((resolve) => {
+        (async() => {
+
+            PROVIDER.setCustomParameters({
+                prompt: 'select_account'
+            });
+
+            try {
+                const result = await signInWithPopup(AUTH, PROVIDER);
+                
+                if (result != null) {
+                    console.log(result);
+                    resolve(result);
+                }
+                
+            } catch(error) {
+                console.log('error!');
+                console.log(error);
+                resolve(null);
+            };
+        })();
     });
 }
 
