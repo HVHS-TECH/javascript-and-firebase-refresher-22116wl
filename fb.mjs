@@ -8,7 +8,7 @@
 
 import { initializeApp }        from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getDatabase, runTransaction, set, get, ref, update, query, orderByChild, limitToFirst, limitToLast, onChildChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import { getDatabase, runTransaction, set, get, ref, update, query, orderByChild, push, limitToFirst, limitToLast, onChildChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
 var fb_db;
 
@@ -109,6 +109,11 @@ function fb_write(path, data) {
             resolve(false);
         });
     });
+}
+
+function fb_push(path) {
+    const REF = ref(fb_db, path);
+    return push(REF);
 }
 
 function fb_delete(data) {
@@ -246,4 +251,4 @@ function fb_getAuthData() {
     return getAuth();
 }
 
-export { fb_initialise, fb_authenticate, fb_authChanged, fb_logout, fb_write, fb_read, fb_update, fb_readSorted, fb_delete, fb_valChanged, changeLog, fb_getAuthData, getAuth };
+export { fb_initialise, fb_authenticate, fb_authChanged, fb_logout, fb_write, fb_read, fb_update, fb_readSorted, fb_delete, fb_valChanged, changeLog, fb_getAuthData, getAuth, fb_push };

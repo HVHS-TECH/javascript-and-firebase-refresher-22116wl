@@ -10,7 +10,7 @@
 
     <h1 id="welcomeMessage">You haven't connected the JavaScript yet</h1>
 
-    <button onclick = "fb_authenticate()">Authenticate</button>
+    <button onclick = "login()">Authenticate</button>
     <button onclick = "fb_logout()">Logout</button>
 
     <p>Your tasks:
@@ -24,9 +24,11 @@
     </ul>
     <p>Text input: </p>
     <input id = "titleChangerInput">
+    <br>
     <button id = "titleChangerButton" onclick="changeHeading();">Change Heading</button>
-    <h4>Firebase basics</h4>
 
+
+    <h4>Firebase basics</h4>
     <ul>
         <li>Create a new Firebase or re-use yours from last year</li>
         <li>Remember how to connect up the 'authorised domains'</li>
@@ -35,9 +37,14 @@
     </ul>
 
     <input id = "fbWriteInput">
-    <button id = "titleChangerButton" onclick="writeData();">Change Data in the base</button>
     <br>
-    <button id = "fbReadButton" onclick="readData();">Display Data in the Title</button>
+    <button id = "postButton" onclick="postMessage();">Post message</button>
+    <br>
+
+    <h2>Messages:</h2>
+    <div id = "messageBoard">
+
+    </div>
 
     <h4>Firebase logins</h4>
     <ul>
