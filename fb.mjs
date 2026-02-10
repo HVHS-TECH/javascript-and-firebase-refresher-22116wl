@@ -8,7 +8,7 @@
 
 import { initializeApp }        from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getDatabase, runTransaction, set, get, ref, update, query, orderByChild, push, limitToFirst, limitToLast, onChildChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import { getDatabase, runTransaction, set, get, ref, update, query, orderByChild, push, onValue, limitToFirst, limitToLast, onChildChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
 var fb_db;
 
@@ -215,11 +215,23 @@ async function fb_readSorted(path, sortkey, number) {
     });
 }
 
+async function valChanged(path, callback) {
+    const messageQuery = query(ref(fb_db, path), orderByChild(`timestamp`))
+    
+    onValue(messageQuery, (snapshot) => {
+        const DATA = snapshot.val();
+        const MESSAGES = Object.entries(DATA); 
+        
+        callback(MESSAGES);
+    })
+    
+}
+
 async function fb_valChanged(path, callback) {
     const dbReference = ref(fb_db, path);
-    console.log(path);
-    
+
     onChildChanged(dbReference, (snapshot) => {
+        console.log(path);
         /*
         const newScore = snapshot.val();
         const playerKey = snapshot.key;
@@ -251,4 +263,6 @@ function fb_getAuthData() {
     return getAuth();
 }
 
-export { fb_initialise, fb_authenticate, fb_authChanged, fb_logout, fb_write, fb_read, fb_update, fb_readSorted, fb_delete, fb_valChanged, changeLog, fb_getAuthData, getAuth, fb_push };
+
+
+export { fb_initialise, fb_authenticate, fb_authChanged, fb_logout, fb_write, fb_read, fb_update, fb_readSorted, fb_delete, fb_valChanged, changeLog, fb_getAuthData, getAuth, fb_push, valChanged };

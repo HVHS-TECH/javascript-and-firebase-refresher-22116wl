@@ -1,4 +1,4 @@
-import { fb_authenticate, fb_logout, fb_read, fb_write, fb_update, fb_readSorted, fb_delete, getAuth, fb_valChanged } from './fb.mjs';
+import { fb_authenticate, fb_logout, fb_read, fb_write, fb_update, fb_readSorted, fb_delete, getAuth, fb_push, fb_valChanged, valChanged } from './fb.mjs';
 
 
 var messageSpace = document.getElementById("welcomeMessage");
@@ -11,9 +11,9 @@ function changeHeading() {
 
 
 async function postMessage() {
+    console.log('psot')
     const auth = getAuth()
     var UID = "";
-    console.log(auth);
 
     if (auth["currentUser"] == null) {
         UID = "Anonymous"
@@ -34,24 +34,30 @@ async function login() {
     const AUTH = await fb_authenticate();
     const UID = AUTH['user']['uid']
 
+    console.log(AUTH);
+
     if (await fb_read('/Users/' + UID) == null) {
-        x
+        fb_write('/Users/' + UID, AUTH['user']['displayName'])
     }
 }
 
-async function updateMessages() {
-    var messages = await fb_read("/Messages/");
+async function updateMessages(messages) {
     console.log(messages);
+    document.getElementById('messageBoard').innerHTML = "";
+
+    for (var message in messages) {
+        console.log(message);
+
+        newMessage = document.createElement('p');
+        newMessage.innerHTML = await fb_read('/Users/' + message[1].uid) + ": " + message.text
+
+        document.getElementById('messageBoard').appendChild(newMessage);
+    }
+
 }
 
-fb_valChanged("/Messages/", function() {
-    updateMessages();
-    console.log('changed')
-});
-
-updateMessages();
-
-window.updateMessages = updateMessages;
+valChanged('/Messages', updateMessages);
+updateMessages(await fb_read("/Messages"));
 
 window.postMessage = postMessage;
 window.login = login;
