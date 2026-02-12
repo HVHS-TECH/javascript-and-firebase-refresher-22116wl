@@ -216,7 +216,7 @@ async function fb_readSorted(path, sortkey, number) {
 }
 
 async function valChanged(path, callback) {
-    const messageQuery = query(ref(fb_db, path), orderByChild(`timestamp`))
+    const messageQuery = query(ref(fb_db, path), orderByChild(`timestamp`));
     
     onValue(messageQuery, (snapshot) => {
         const DATA = snapshot.val();
@@ -265,4 +265,4 @@ function fb_getAuthData() {
 
 
 
-export { fb_initialise, fb_authenticate, fb_authChanged, fb_logout, fb_write, fb_read, fb_update, fb_readSorted, fb_delete, fb_valChanged, changeLog, fb_getAuthData, getAuth, fb_push, valChanged };
+export { fb_initialise, fb_authenticate, fb_authChanged, fb_logout, fb_write, fb_read, fb_update, fb_readSorted, fb_delete, fb_valChanged, changeLog, fb_getAuthData, getAuth, fb_push, valChanged, fb_db };

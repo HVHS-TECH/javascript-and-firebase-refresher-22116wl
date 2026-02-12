@@ -1,4 +1,17 @@
 #messageBoard {
     border: 3px solid black;
-    padding-left: 10px;
+    padding: 5px;
+    padding-left: 15px;
+
+    height: 400px;
+}
+
+#messageSpace {
+    overflow-y: scroll;
+    scroll-behavior: auto;
+    height: 370px;
+}
+
+#fbWriteInput {
+    width: 98%;
 }

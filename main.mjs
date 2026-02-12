@@ -1,4 +1,5 @@
-import { fb_authenticate, fb_logout, fb_read, fb_write, fb_update, fb_readSorted, fb_delete, getAuth, fb_push, fb_valChanged, valChanged } from './fb.mjs';
+import { fb_authenticate, fb_logout, fb_read, fb_write, fb_update, fb_readSorted, fb_delete, getAuth, fb_push, fb_valChanged, valChanged, fb_db } from './fb.mjs';
+import { query, ref, orderByChild } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
 
 var messageSpace = document.getElementById("welcomeMessage");
@@ -14,21 +15,33 @@ async function postMessage() {
     console.log('psot')
     const auth = getAuth()
     var UID = "";
+    var UserName = "";
 
     if (auth["currentUser"] == null) {
-        UID = "Anonymous"
+        UID = "Anonymous";
+        UserName = "Anonymous";
     } else {
-        UID = auth["currentUser"]["uid"]
+        UID = auth["currentUser"]["uid"];
+        UserName = auth["currentUser"]["displayName"];
     }
 
 
     const KEY = fb_push(`/Messages`);
     fb_write(`/Messages/${KEY.key}`, {
         uid:  UID,
+        userName: UserName,
         text: document.getElementById("fbWriteInput").value,
         timestamp: Date.now(),
     });
 }
+
+document.addEventListener('keydown', function(event) {
+    if (event.key == 'Enter' && document.getElementById("fbWriteInput").value != "") {
+        postMessage();
+        document.getElementById("fbWriteInput").value = "";
+    }
+
+});
 
 async function login() {
     const AUTH = await fb_authenticate();
@@ -42,22 +55,22 @@ async function login() {
 }
 
 async function updateMessages(messages) {
-    console.log(messages);
-    document.getElementById('messageBoard').innerHTML = "";
+    messageSpace = document.getElementById('messageSpace')
+    messageSpace.innerHTML = "";
 
-    for (var message in messages) {
-        console.log(message);
+    for (var i = 0; i < messages.length; i++ ) {
+        var message = messages[i][1];
 
-        newMessage = document.createElement('p');
-        newMessage.innerHTML = await fb_read('/Users/' + message[1].uid) + ": " + message.text
+        var newMessage = document.createElement('p');
+        newMessage.innerHTML = message.userName + ": " + message.text
 
-        document.getElementById('messageBoard').appendChild(newMessage);
+        messageSpace.appendChild(newMessage);
     }
 
+    messageSpace.scrollTop = messageSpace.scrollHeight;
 }
 
 valChanged('/Messages', updateMessages);
-updateMessages(await fb_read("/Messages"));
 
 window.postMessage = postMessage;
 window.login = login;
