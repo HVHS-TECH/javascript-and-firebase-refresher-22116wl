@@ -12,6 +12,11 @@ function changeHeading() {
 
 
 async function postMessage() {
+    if (getAuth().currentUser == null) {
+        alert('log in to send messages!');
+        return;
+    }
+
     console.log('psot')
     const auth = getAuth()
     var UID = "";
@@ -43,6 +48,7 @@ document.addEventListener('keydown', function(event) {
 
 });
 
+
 async function login() {
     const AUTH = await fb_authenticate();
     const UID = AUTH['user']['uid']
@@ -52,7 +58,23 @@ async function login() {
     if (await fb_read('/Users/' + UID) == null) {
         fb_write('/Users/' + UID, AUTH['user']['displayName'])
     }
+
+    console.log(AUTH);
+
+    if (AUTH != null) {
+        document.getElementById('logOutButton').disabled = false;
+        document.getElementById('logInButton').disabled = true;
+    }
 }
+
+async function logout() {
+    fb_logout();
+
+    document.getElementById('logOutButton').disabled = true;
+    document.getElementById('logInButton').disabled = false;
+}
+
+logout();
 
 async function updateMessages(messages) {
     messageSpace = document.getElementById('messageSpace')
@@ -74,7 +96,7 @@ valChanged('/Messages', updateMessages);
 
 window.postMessage = postMessage;
 window.login = login;
-window.fb_logout = fb_logout;
+window.logout = logout;
 window.fb_read = fb_read;
 window.fb_write = fb_write;
 window.fb_update = fb_update;

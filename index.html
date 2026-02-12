@@ -11,9 +11,6 @@
 
     <h1 id="welcomeMessage">You haven't connected the JavaScript yet</h1>
 
-    <button onclick = "login()">Authenticate</button>
-    <button onclick = "fb_logout()">Logout</button>
-
     <p>Your tasks:
     <h2>JavaScript</h2>
     <ul>
@@ -45,6 +42,11 @@
         <div id = "messageSpace"></div>
         <input id = "fbWriteInput">
     </div>
+
+    <br>
+
+    <button id = "logInButton" onclick = "login()">Log In</button>
+    <button id = "logOutButton"  onclick = "logout()">Log Out</button>
 
     <h4>Firebase logins</h4>
     <ul>

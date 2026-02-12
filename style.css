@@ -15,3 +15,15 @@
 #fbWriteInput {
     width: 98%;
 }
+
+button {
+    background-color: white;
+}
+
+button:hover {
+    background-color: lightgray;
+}
+
+button:disabled {
+    background-color: gray;
+}
