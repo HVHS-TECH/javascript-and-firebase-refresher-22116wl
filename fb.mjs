@@ -259,9 +259,11 @@ async function changeLog() {
 	}
 }
 
-function fb_getAuthData() {
+async function fb_getAuthData() {
     return getAuth();
 }
+
+
 
 
 
